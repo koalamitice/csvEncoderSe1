@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project csvDecoder with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="${dir.buildfile}/.."/>
+    <property name="dir.jarfile" value="${dir.buildfile}"/>
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/csvDecoder.jar">
+            <manifest>
+                <attribute name="Main-Class" value="csvDecoder.StartEncoder"/>
+                <attribute name="Class-Path" value=". csvDecoder_lib/org.eclipse.swt.win32.win32.x86_64_3.112.0.v20190904-0609.jar"/>
+            </manifest>
+            <fileset dir="${dir.jarfile}/bin"/>
+        </jar>
+        <delete dir="${dir.jarfile}/csvDecoder_lib"/>
+        <mkdir dir="${dir.jarfile}/csvDecoder_lib"/>
+        <copy file="C:/Users/koalamitice/Desktop/eclipse0919/plugins/org.eclipse.swt.win32.win32.x86_64_3.112.0.v20190904-0609.jar" todir="${dir.jarfile}/csvDecoder_lib"/>
+    </target>
+</project>

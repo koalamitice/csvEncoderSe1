@@ -8,6 +8,8 @@ import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -66,6 +68,13 @@ public class Gui {
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		table.setLayoutData(data);
+		
+		table.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				table.deselectAll();
+			}
+		});
 		
 		String[] colNames = new String[2 + taskNumber];
 		colNames[0] = "Blatt";

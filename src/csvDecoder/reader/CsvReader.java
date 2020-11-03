@@ -44,6 +44,7 @@ public class CsvReader {
 				//format line input:
 				line = line.replaceAll(",", ";"); //catch cases where ppls use , as separator
 				line = removeByteOrderMarks(line); //replace possible byte oder mark
+				line = replaceUmlauts(line);
 				String[] lineData = line.split(";");
 				//remove possible white spaces from all entries except the name
 				for (int j = 0; j < lineData.length; j++) {
@@ -91,6 +92,20 @@ public class CsvReader {
 		for (String curBOM : BOMs) {
 			input = input.replaceAll(curBOM, "");
 		}
+		return input;
+	}
+	
+	/**
+	 * trigger warning: ugly code :)
+	 */
+	private String replaceUmlauts (String input) {
+		input = input.replaceAll("Ä", "\u00c4");
+		input = input.replaceAll("ä", "\u00e4");
+		input = input.replaceAll("Ö", "\u00d6");
+		input = input.replaceAll("ö", "\u00f6");
+		input = input.replaceAll("Ü", "\u00dc");
+		input = input.replaceAll("ü", "\u00fc");
+		System.out.println(input);
 		return input;
 	}
 }

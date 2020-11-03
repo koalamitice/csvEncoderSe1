@@ -76,12 +76,13 @@ public class Gui {
 			}
 		});
 		
-		String[] colNames = new String[2 + taskNumber];
-		colNames[0] = "Blatt";
-		colNames[1] = "Studenten Name";
+		String[] colNames = new String[3 + taskNumber];
+		colNames[0] = "Pos.";
+		colNames[1] = "Blatt";
+		colNames[2] = "Studenten Name";
 		for (int i = 0; i < taskNumber; i++) {
 			int AufgabenNr = i + 1;
-			colNames[i + 2] = "Aufgabe " + AufgabenNr;
+			colNames[i + 3] = "Aufgabe " + AufgabenNr;
 		}
 		
 		for (int i = 0; i < colNames.length; i++) {
@@ -93,25 +94,28 @@ public class Gui {
 	
 	public void fillTable(Set<StudentData> data) {
 		this.studentData = data;
+		int counter = 0;
 		for (StudentData curData : data) {
 			TableItem item = new TableItem(table, SWT.NONE);
-			item.setText(0, String.valueOf(curData.getBlattNr()));
+			item.setText(0, String.valueOf(counter));
+			item.setText(1, String.valueOf(curData.getBlattNr()));
 			if (curData.getBlattNr() != exercise) {
 				item.setBackground(0, blue);
 			}
-			item.setText(1, curData.getName());
+			item.setText(2, curData.getName());
 			
 			for (int i = 0; i < taskNumber; i++) {
 				if (i >= curData.getVotierungen().length) {
 					continue;
 				}
-				item.setText(i + 2, String.valueOf(curData.getVotierungen()[i]));
+				item.setText(i + 3, String.valueOf(curData.getVotierungen()[i]));
 				if (curData.getVotierungen()[i] == true) {
-					item.setBackground(i + 2, green);
+					item.setBackground(i + 3, green);
 				} else {
-					item.setBackground(i + 2, red);
+					item.setBackground(i + 3, red);
 				}
 			}
+			counter++;
 		}
 		
 		System.out.println("[table filled]");

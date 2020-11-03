@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import csvDecoder.gui.Gui;
+import csvDecoder.gui.JavaFXGui;
 import csvDecoder.reader.CsvReader;
 import csvDecoder.util.StudentData;
 
@@ -32,6 +33,11 @@ public class StartEncoder {
 		//fill Gui:
 		Gui gui = new Gui(shell, getExerciseNumber(data));
 		gui.fillTable(data);
+//		try {
+//			new JavaFXGui(getExerciseNumber(data), data);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		
 		//open gui:
 		shell.open();

@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import csvDecoder.util.StudentComparator;
 import csvDecoder.util.StudentData;
@@ -45,10 +47,19 @@ public class CsvReader {
 				line = line.replaceAll(",", ";"); //catch cases where ppls use , as separator
 				line = removeByteOrderMarks(line); //replace possible byte oder mark
 				line = replaceUmlauts(line);
+				if (checkStringForUnwatedCharacters(line)) {
+					System.out.println("[ERROR:] line [" + line + "] in is possibily misformated with wrong characters");
+					System.out.println("---------> check file: " + csvFiles[i].getAbsolutePath());
+					continue;
+				}
 				String[] lineData = line.split(";");
 				//remove possible white spaces from all entries except the name
 				for (int j = 0; j < lineData.length; j++) {
 					if (j == 1) {
+						//remove possible first white space in name
+						if (lineData[j].charAt(0) == ' ') {
+							lineData[j] = lineData[j].substring(1);
+						}
 						continue;
 					}
 					lineData[j] = lineData[j].replaceAll(" ", "");
@@ -97,15 +108,25 @@ public class CsvReader {
 	
 	/**
 	 * trigger warning: ugly code :)
+	 * this method replaces UTF reading errors from Umlauts with the actual character
 	 */
 	private String replaceUmlauts (String input) {
-		input = input.replaceAll("Ã„", "\u00c4");
-		input = input.replaceAll("Ã¤", "\u00e4");
-		input = input.replaceAll("Ã–", "\u00d6");
-		input = input.replaceAll("Ã¶", "\u00f6");
-		input = input.replaceAll("Ãœ", "\u00dc");
-		input = input.replaceAll("Ã¼", "\u00fc");
-		System.out.println(input);
+		input = input.replaceAll("Ã„", "\u00c4"); //Ä
+		input = input.replaceAll("Ã¤", "\u00e4"); //ä
+		input = input.replaceAll("Ã–", "\u00d6"); //Ö
+		input = input.replaceAll("Ã¶", "\u00f6"); //ö
+		input = input.replaceAll("Ãœ", "\u00dc"); //Ü
+		input = input.replaceAll("Ã¼", "\u00fc"); //ü
 		return input;
+	}
+	
+	/**
+	 * wanted characters: {A-Z}, Ää, Öö, Üü, {0-6}, ";"
+	 * @return true when the input string returns unwanted characters
+	 */
+	private boolean checkStringForUnwatedCharacters(String input) {
+		Pattern p = Pattern.compile("[^A-Za-z0-6;ÄäÖöÜü ]");
+		Matcher m = p.matcher(input);
+		return m.find();
 	}
 }

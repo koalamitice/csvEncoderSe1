@@ -48,7 +48,7 @@ public class CsvReader {
 				line = removeByteOrderMarks(line); //replace possible byte oder mark
 				line = replaceUmlauts(line);
 				if (checkStringForUnwatedCharacters(line)) {
-					System.out.println("[ERROR:] line [" + line + "] in is possibily misformated with wrong characters");
+					System.out.println("[ERROR:] line [" + line + "] is possibily misformated with wrong characters");
 					System.out.println("---------> check file: " + csvFiles[i].getAbsolutePath());
 					continue;
 				}
@@ -117,6 +117,8 @@ public class CsvReader {
 		input = input.replaceAll("Ã¶", "\u00f6"); //ö
 		input = input.replaceAll("Ãœ", "\u00dc"); //Ü
 		input = input.replaceAll("Ã¼", "\u00fc"); //ü
+		input = input.replaceAll("Ã¡", "\u00E1"); //á
+		System.out.println(input);
 		return input;
 	}
 	
@@ -125,7 +127,7 @@ public class CsvReader {
 	 * @return true when the input string returns unwanted characters
 	 */
 	private boolean checkStringForUnwatedCharacters(String input) {
-		Pattern p = Pattern.compile("[^A-Za-z0-6;ÄäÖöÜü ]");
+		Pattern p = Pattern.compile("[{/_\\\\]");
 		Matcher m = p.matcher(input);
 		return m.find();
 	}

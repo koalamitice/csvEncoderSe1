@@ -69,12 +69,18 @@ public class CsvReader {
 				String name = lineData[1];
 				boolean[] votes = new boolean[lineData.length - 2];
 				for (int j = 0; j < votes.length; j++) {
-					if (Integer.valueOf(lineData[j + 2]) == 0) {
-						votes[j] = false;
-					} else if (Integer.valueOf(lineData[j + 2]) == 1) {
-						votes[j] = true;
-					} else {
-						System.out.println("[ERROR: ] reading votes in: \"" + csvFiles[i].getName() + "\"");
+					try {
+						if (Integer.valueOf(lineData[j + 2]) == 0) {
+							votes[j] = false;
+						} else if (Integer.valueOf(lineData[j + 2]) == 1) {
+							votes[j] = true;
+						} else {
+							System.out.println("[ERROR:] reading votes in: \"" + csvFiles[i].getName() + "\"");
+						}
+					} catch (NumberFormatException exc) {
+						System.out.println("[WARNING:] catched " + exc + " at file \"" + csvFiles[i].getName() + "\"");
+						System.out.println("--------> possibly caused by: ended with a semikolon followed by whitespace");
+						System.out.println("--------> if this is the case, the warning can be ignored");
 					}
 				}
 				
@@ -118,16 +124,14 @@ public class CsvReader {
 		input = input.replaceAll("Ãœ", "\u00dc"); //Ü
 		input = input.replaceAll("Ã¼", "\u00fc"); //ü
 		input = input.replaceAll("Ã¡", "\u00E1"); //á
-		System.out.println(input);
 		return input;
 	}
 	
 	/**
-	 * wanted characters: {A-Z}, Ää, Öö, Üü, {0-6}, ";"
 	 * @return true when the input string returns unwanted characters
 	 */
 	private boolean checkStringForUnwatedCharacters(String input) {
-		Pattern p = Pattern.compile("[{/_\\\\]");
+		Pattern p = Pattern.compile("[{/\\\\]");
 		Matcher m = p.matcher(input);
 		return m.find();
 	}
